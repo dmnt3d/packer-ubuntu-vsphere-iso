@@ -44,8 +44,8 @@ If you are on a Windows machine then use the `build-*.ps1` files.
 ### Optional: Template default credentials
 
 the default credentials after a successful build are   
-Username: `vagrant`   
-Password: `vagrant`  
+Username: `ubuntu`   
+Password: `ubuntu`  
 
 If you would like to change the default ćredentials before a packer build, then you need to edit the following files:
 
@@ -56,3 +56,5 @@ To generate an encypted password for [user-data](./html/user-data) use the follo
 ```bash
 mkpasswd -m SHA-512 --rounds=4096
 ```
+or:
+docker run -it --rm alpine mkpasswd -m SHA512 ubuntu

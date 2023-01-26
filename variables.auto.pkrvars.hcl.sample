@@ -31,3 +31,7 @@ ssh_username            = "vagrant"
 
 # SSH password (created in autounattend.xml. If you change it here the please also adjust in ./html/user-data)
 ssh_password            = "vagrant"
+
+
+# ISO Objects
+iso_path = ["[vmware-nfs] /iso/ubuntu-22.04.1-live-server-amd64.iso"]

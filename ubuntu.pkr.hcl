@@ -1,11 +1,11 @@
-packer {
-  required_plugins {
-    vsphere = {
-      version = ">= 0.0.1"
-      source = "github.com/hashicorp/vsphere"
-    }
-  }
-}
+# packer {
+#   required_plugins {
+#     vsphere = {
+#       version = ">= 0.0.1"
+#       source = "github.com/hashicorp/vsphere"
+#     }
+#   }
+# }
 
 variable "cpu_num" {
   type    = number
@@ -32,6 +32,16 @@ variable "os_iso_url" {
   default = ""
 }
 
+variable "iso_path" {
+  # type    = string
+  description = "The path on the source vSphere datastore for ISO images."
+  default = []
+  }
+
+variable "vsphere_folder" {
+  type    = string
+  default = ""
+}
 variable "vsphere_datastore" {
   type    = string
   default = ""
@@ -51,6 +61,12 @@ variable "vsphere_host" {
   type    = string
   default = ""
 }
+
+variable "vsphere_cluster" {
+  type    = string
+  default = ""
+}
+
 
 variable "vsphere_password" {
   type      = string
@@ -111,10 +127,17 @@ variable "boot_command" {
   default = []
 }
 
+locals {
+  buildtime = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
+}
+
 source "vsphere-iso" "ubuntu" {
+  notes = "Built by HashiCorp Packer on ${local.buildtime}."
+  folder = var.vsphere_folder
 
   vcenter_server        = var.vsphere_server
-  host                  = var.vsphere_host
+  # host                = var.vsphere_host
+  cluster               = var.vsphere_cluster
   username              = var.vsphere_username
   password              = var.vsphere_password
   insecure_connection   = "true"
@@ -126,8 +149,9 @@ source "vsphere-iso" "ubuntu" {
   RAM_reserve_all       = true
   disk_controller_type  = ["pvscsi"]
   guest_os_type         = var.vsphere_guest_os_type
-  iso_checksum          = var.os_iso_checksum
-  iso_url               = var.os_iso_url
+  # iso_checksum          = var.os_iso_checksum
+  # iso_url               = var.os_iso_url
+  iso_paths = var.iso_path
   cd_content            = {
     "/meta-data" = file("${var.cloudinit_metadata}")
     "/user-data" = file("${var.cloudinit_userdata}")
